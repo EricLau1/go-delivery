@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "./pb";
+
+message Wallet {
+  string id = 1;
+  string user_id = 2;
+  float cash = 3;
+  int64 created_at = 4;
+  int64 updated_at = 5;
+}
+
+message GetWalletRequest {
+  string id = 1;
+}
+
+message GetUserWalletRequest {
+  string user_id = 2;
+}
+
+message CreditRequest {
+  string wallet_id = 1;
+  float amount = 2;
+}
+
+message DebitRequest {
+  string wallet_id = 1;
+  float amount = 2;
+}
+
+message ListWalletsRequest {
+
+}
+
+service WalletsService {
+  rpc CreateWallet(Wallet) returns (Wallet);
+  rpc GetUserWallet(GetUserWalletRequest) returns (Wallet);
+  rpc GetWallet(GetWalletRequest) returns (Wallet);
+  rpc Credit(CreditRequest) returns (Wallet);
+  rpc Debit(DebitRequest) returns (Wallet);
+  rpc ListWallets(ListWalletsRequest) returns (stream Wallet);
+}

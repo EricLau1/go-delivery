@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "./pb";
+
+import "google/protobuf/empty.proto";
+
+message Product {
+  string id = 1;
+  string seller_id = 2;
+  string name = 3;
+  float price = 4;
+  float delivery_cost = 5;
+  int32 quantity = 6;
+  int64 created_at = 7;
+  int64 updated_at = 8;
+}
+
+message UpdateProductRequest {
+  string id = 1;
+  string name = 2;
+  float price = 3;
+  float delivery_cost = 4;
+  int32 quantity = 5;
+}
+
+message GetProductRequest {
+  string id = 1;
+}
+
+message ListSellerProductsRequest {
+  string seller_id = 1;
+}
+
+message ListProductsRequest {
+
+}
+
+message DeleteProductRequest {
+  string id = 1;
+}
+
+service ProductsService {
+  rpc CreateProduct(Product) returns (Product);
+  rpc UpdateProduct(UpdateProductRequest) returns (Product);
+  rpc GetProduct(GetProductRequest) returns (Product);
+  rpc ListSellerProducts(ListSellerProductsRequest) returns (stream Product);
+  rpc ListProducts(ListProductsRequest) returns (stream Product);
+  rpc DeleteProduct(DeleteProductRequest) returns (google.protobuf.Empty);
+}

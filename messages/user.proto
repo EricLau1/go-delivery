@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "./pb";
+
+enum Role {
+  None = 0;
+  Customer = 1;
+  Seller = 2;
+  Delivery = 3;
+  Admin = 4;
+}
+
+message User {
+  string id = 1;
+  string email = 2;
+  string password = 3;
+  Role role = 4;
+  int64 created_at = 5;
+  int64 updated_at = 6;
+}
+
+message SignInRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message SignInResponse {
+  string token = 1;
+}
+
+message GetUserRequest {
+  string id = 1;
+}
+
+message ListUsersRequest {
+}
+
+service AccountsService {
+  rpc SignUp(User) returns (User);
+  rpc SignIn(SignInRequest) returns (SignInResponse);
+  rpc GetUser(GetUserRequest) returns (User);
+  rpc ListUsers(ListUsersRequest) returns (stream User);
+}

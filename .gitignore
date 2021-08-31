@@ -1,0 +1,5 @@
+.idea
+main
+.env
+pb/**/*
+bin

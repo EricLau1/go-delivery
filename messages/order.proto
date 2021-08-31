@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "./pb";
+
+import "google/protobuf/empty.proto";
+
+enum OrderStatus {
+  Placed = 0;
+  Accepted = 1;
+  Delivering = 3;
+  Delivered = 4;
+}
+
+message Order {
+  string id = 1;
+  string customer_id = 2;
+  string seller_id = 3;
+  string product_id = 4;
+  string deliverer_id = 5;
+  OrderStatus status = 6;
+  float unit_price = 7;
+  int32  quantity = 8;
+  float delivery_cost = 9;
+  float amount = 10;
+  int64 created_at = 11;
+  int64 updated_at = 12;
+}
+
+message GetOrderRequest {
+  string id = 1;
+}
+
+message ListOrdersRequest {
+
+}
+
+message ListOrdersBySellerRequest {
+  string seller_id = 1;
+}
+
+message ListOrdersByStatusRequest {
+  OrderStatus status = 1;
+}
+
+message CancelOrderRequest {
+  string id = 1;
+}
+
+message DeleteOrderRequest {
+  string id = 1;
+}
+
+message ApproveOrderRequest {
+  string id = 1;
+  string seller_id = 2;
+}
+
+message DeliverOrderRequest {
+  string id = 1;
+  string delivery_id = 2;
+}
+
+message ConfirmOrderDeliveredRequest {
+  string id = 1;
+  string customer_id = 2;
+}
+
+service OrdersService {
+  rpc CreateOrder(Order) returns (Order);
+  rpc GetOrder(GetOrderRequest) returns (Order);
+  rpc ListOrders(ListOrdersRequest) returns (stream Order);
+  rpc ListOrdersBySeller(ListOrdersBySellerRequest) returns (stream Order);
+  rpc ListOrdersByStatus(ListOrdersByStatusRequest) returns (stream Order);
+  rpc ApproveOrder(ApproveOrderRequest) returns (Order);
+  rpc DeliverOrder(DeliverOrderRequest) returns (Order);
+  rpc ConfirmOrderDelivered(ConfirmOrderDeliveredRequest) returns (Order);
+  rpc CancelOrder(CancelOrderRequest) returns (google.protobuf.Empty);
+  rpc DeleteOrder(DeleteOrderRequest) returns (google.protobuf.Empty);
+}
