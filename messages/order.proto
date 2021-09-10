@@ -52,7 +52,7 @@ message DeleteOrderRequest {
   string id = 1;
 }
 
-message ApproveOrderRequest {
+message AcceptOrderRequest {
   string id = 1;
   string seller_id = 2;
 }
@@ -67,15 +67,47 @@ message ConfirmOrderDeliveredRequest {
   string customer_id = 2;
 }
 
+message StartOrderRequest {
+  string customer_id = 2;
+  string seller_id = 3;
+  string product_id = 4;
+  int32  quantity = 8;
+}
+
+message DefaultOrderResponse {
+  string order_id = 1;
+}
+
+message QueryOrderRequest {
+  string order_id = 1;
+}
+
+message StartDeliveryRequest {
+  string order_id = 1;
+  string deliverer_id = 2;
+}
+
+message ConfirmDeliveredOrderRequest {
+  string order_id = 1;
+}
+
 service OrdersService {
   rpc CreateOrder(Order) returns (Order);
   rpc GetOrder(GetOrderRequest) returns (Order);
   rpc ListOrders(ListOrdersRequest) returns (stream Order);
   rpc ListOrdersBySeller(ListOrdersBySellerRequest) returns (stream Order);
   rpc ListOrdersByStatus(ListOrdersByStatusRequest) returns (stream Order);
-  rpc ApproveOrder(ApproveOrderRequest) returns (Order);
+  rpc AcceptOrder(AcceptOrderRequest) returns (Order);
   rpc DeliverOrder(DeliverOrderRequest) returns (Order);
   rpc ConfirmOrderDelivered(ConfirmOrderDeliveredRequest) returns (Order);
   rpc CancelOrder(CancelOrderRequest) returns (google.protobuf.Empty);
   rpc DeleteOrder(DeleteOrderRequest) returns (google.protobuf.Empty);
+}
+
+service OrdersWorkflowService {
+  rpc StartOrder(StartOrderRequest) returns (DefaultOrderResponse);
+  rpc QueryOrder(QueryOrderRequest) returns (Order);
+  rpc AcceptOrder(AcceptOrderRequest) returns (DefaultOrderResponse);
+  rpc StartDelivery(StartDeliveryRequest) returns (DefaultOrderResponse);
+  rpc ConfirmDeliveredOrder(ConfirmDeliveredOrderRequest) returns (DefaultOrderResponse);
 }

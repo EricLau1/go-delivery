@@ -83,6 +83,9 @@ func main() {
 	ordersClient := pb.NewOrdersServiceClient(ordersConn)
 	orders.RegisterOrdersHandlers(ordersClient, middlewareGroup, router)
 
+	ordersWfClient := pb.NewOrdersWorkflowServiceClient(ordersConn)
+	orders.RegisterOrdersWorkflowHandlers(ordersWfClient, middlewareGroup, router)
+
 	headers := handlers.AllowedHeaders([]string{"Content-Type", "Authorization", "X-Requested-with"})
 	methods := handlers.AllowedMethods([]string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete})
 	origins := handlers.AllowedOrigins([]string{"*"})

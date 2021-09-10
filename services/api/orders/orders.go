@@ -52,7 +52,7 @@ func RegisterOrdersHandlers(ordersClient pb.OrdersServiceClient, m middlewares.M
 
 	router.Path("/orders/{order_id}/sellers/{id}").
 		HandlerFunc(
-			m.Apply(handler.PutApproveOrder, middlewares.Options{
+			m.Apply(handler.PutAcceptOrder, middlewares.Options{
 				AuthRequired: true,
 				UserRequired: true,
 				RoleRequired: pb.Role_Seller,
@@ -304,7 +304,7 @@ func (h *ordersHandler) GetSellerOrders(w http.ResponseWriter, r *http.Request) 
 	rest.WriteAsJson(w, http.StatusOK, orders)
 }
 
-func (h *ordersHandler) PutApproveOrder(w http.ResponseWriter, r *http.Request) {
+func (h *ordersHandler) PutAcceptOrder(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	orderId, err := primitive.ObjectIDFromHex(vars["order_id"])
 	if err != nil {
@@ -318,10 +318,12 @@ func (h *ordersHandler) PutApproveOrder(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	order, err := h.ordersClient.ApproveOrder(r.Context(), &pb.ApproveOrderRequest{
+	accept := &pb.AcceptOrderRequest{
 		Id:       orderId.Hex(),
 		SellerId: sellerId.Hex(),
-	})
+	}
+
+	order, err := h.ordersClient.AcceptOrder(r.Context(), accept)
 	if err != nil {
 		rest.WriteError(w, http.StatusUnprocessableEntity, err)
 		return

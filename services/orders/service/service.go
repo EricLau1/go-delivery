@@ -193,7 +193,7 @@ func (s *service) ListOrdersByStatus(req *pb.ListOrdersByStatusRequest, stream p
 	return nil
 }
 
-func (s *service) ApproveOrder(ctx context.Context, req *pb.ApproveOrderRequest) (*pb.Order, error) {
+func (s *service) ApproveOrder(ctx context.Context, req *pb.AcceptOrderRequest) (*pb.Order, error) {
 	id, err := primitive.ObjectIDFromHex(req.Id)
 	if err != nil {
 		return nil, err
